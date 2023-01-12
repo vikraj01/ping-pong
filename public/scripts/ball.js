@@ -4,10 +4,25 @@ const INITIAL_VELOCITY = 3
 export default class Ball {
   constructor (ctx) {
     this.ctx = ctx
-    this.x = 250
-    this.y = 350
+    this._x = 250
+    this._y = 350
     this.direction = { x: 0, y: 0 }
-    this.paint()
+  }
+
+  get x () {
+    return this._x
+  }
+
+  set x (value) {
+    this._x = value
+  }
+
+  get y () {
+    return this._y
+  }
+
+  set y (value) {
+    this._y = value
   }
 
   paint () {
@@ -17,7 +32,7 @@ export default class Ball {
     this.ctx.fill()
   }
 
-  reset (height, weight) {
+  reset (height, width) {
     this.x = width / 2
     this.y = height / 2
     this.direction = { x: 0 }
@@ -28,7 +43,7 @@ export default class Ball {
     this.velocity = INITIAL_VELOCITY
   }
 
-  update (height, paddleDiff, paddleX, paddleWidth) {
+  update (height, paddleDiff, paddles, paddleWidth, width) {
     this.x += this.direction.x * this.velocity
     this.y += this.direction.y * this.velocity
     if (this.x < 0 || this.x > width) {
@@ -36,13 +51,18 @@ export default class Ball {
     }
 
     if (this.y > height - paddleDiff || this.y < paddleDiff) {
+      console.log(
+        (this.x >= paddles[0] && this.x <= paddles[0] + paddleWidth) ||
+          (this.x >= paddles[1] && this.x <= paddles[1] + paddleWidth)
+      )
       if (
-        (this.x >= paddleX[0] && this.x <= paddleX[0] + paddleWidth) ||
-        (this.x >= paddleX[1] && this.x <= paddleX[1] + paddleWidth)
+        (this.x >= paddles[0] && this.x <= paddles[0] + paddleWidth) ||
+        (this.x >= paddles[1] && this.x <= paddles[1] + paddleWidth)
       ) {
         this.direction.y *= -1
       } else {
-        this.reset()
+        console.log('Reset', paddles, this.x, this.y)
+        this.reset(height, width)
       }
     }
   }
