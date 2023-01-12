@@ -1,42 +1,35 @@
 import Ball from './ball.js'
 import Paddle from './paddle.js'
+import {
+  BOTTOM_PADDLE_HEIGHT,
+  HEIGHT,
+  TOP_PADDLE_HEIGHT,
+  WIDTH
+} from './constants.js'
 
 const canvas = document.createElement('canvas')
 const context = canvas.getContext('2d')
-let width = 500
-let height = 700
 
-// Paddle
-let paddleHeight = 10
-let paddleWidth = 50
-let paddleDiff = 25
-let paddleX = [225, 225]
 
 let ball = new Ball(context)
 
-let bottomPaddle = new Paddle(context, height - 20)
-let topPaddle = new Paddle(context, 10)
+let bottomPaddle = new Paddle(context, BOTTOM_PADDLE_HEIGHT)
+let topPaddle = new Paddle(context, TOP_PADDLE_HEIGHT)
 
 function createCanvas () {
   canvas.id = 'canvas'
-  canvas.width = width
-  canvas.height = height
+  canvas.width = WIDTH
+  canvas.height = HEIGHT
   document.body.appendChild(canvas)
   renderCanvas()
 }
 
 function renderCanvas () {
   context.fillStyle = 'black'
-  context.fillRect(0, 0, width, height)
-
-  //   context.fillStyle = 'white'
-  //   context.fillRect(paddleX[0], height - 20, paddleWidth, paddleHeight) // Bottom paddle
-  //   context.fillRect(paddleX[1], 10, paddleWidth, paddleHeight) // Up Paddle
+  context.fillRect(0, 0, WIDTH, HEIGHT)
 
   bottomPaddle.paint()
   topPaddle.paint()
-
-  // Dashed Line
 
   context.beginPath()
   context.setLineDash([4])
@@ -50,22 +43,14 @@ function renderCanvas () {
 
 function animate () {
   renderCanvas()
-  ball.update(
-    height,
-    paddleDiff,
-    [bottomPaddle.position, topPaddle.position],
-    [bottomPaddle.y, topPaddle.y],
-    paddleWidth,
-    width,
-    paddleHeight
-  )
+  ball.update([bottomPaddle.position, topPaddle.position])
   topPaddle.auto(ball.x)
   window.requestAnimationFrame(animate)
 }
 
 function startGame () {
   createCanvas()
-  ball.reset(height, width)
+  ball.reset()
   animate()
 }
 

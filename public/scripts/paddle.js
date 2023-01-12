@@ -1,7 +1,4 @@
-let paddleHeight = 10
-let paddleWidth = 50
-let paddleDiff = 25
-const SPEED = 2
+import { AI_PADDLE_SPEED, PADDLE_DIFF, PADDLE_HEIGHT, PADDLE_WIDTH } from "./constants.js"
 export default class Paddle {
   constructor (ctx, y) {
     this.ctx = ctx
@@ -19,15 +16,14 @@ export default class Paddle {
 
   paint () {
     this.ctx.fillStyle = 'white'
-
-    this.ctx.fillRect(this.position, this.y, paddleWidth, paddleHeight)
+    this.ctx.fillRect(this.position, this.y, PADDLE_WIDTH, PADDLE_HEIGHT)
   }
 
   auto (ballX) {
-    if (this.position + paddleDiff < ballX) {
-      this.position += SPEED
+    if (this.position + PADDLE_DIFF < ballX) {
+      this.position += AI_PADDLE_SPEED
     } else {
-      this.position -= SPEED
+      this.position -= AI_PADDLE_SPEED
     }
   }
 }

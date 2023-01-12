@@ -1,6 +1,12 @@
-const RADIUS = 5
-const INITIAL_VELOCITY = 3
-
+import {
+  HEIGHT,
+  WIDTH,
+  PADDLE_DIFF,
+  PADDLE_HEIGHT,
+  PADDLE_WIDTH,
+  BALL_INITIAL_VELOCITY,
+  BALL_RADIUS
+} from './constants.js'
 export default class Ball {
   constructor (ctx) {
     this.ctx = ctx
@@ -27,71 +33,42 @@ export default class Ball {
 
   paint () {
     this.ctx.beginPath()
-    this.ctx.arc(this.x, this.y, RADIUS, 2 * Math.PI, false)
+    this.ctx.arc(this.x, this.y, BALL_RADIUS, 2 * Math.PI, false)
     this.ctx.fillStyle = 'white'
     this.ctx.fill()
   }
 
-  reset (height, width) {
-    this.x = width / 2
-    this.y = height / 2
+  reset () {
+    this.x = WIDTH / 2
+    this.y = HEIGHT / 2
     this.direction = { x: 0 }
     while (Math.abs(this.direction.x <= 0.2 || this.direction.x >= 0.9)) {
       const heading = randomNum(0, 2 * Math.PI)
       this.direction = { x: Math.cos(heading), y: Math.sin(heading) }
     }
-    this.velocity = INITIAL_VELOCITY
+    this.velocity = BALL_INITIAL_VELOCITY
   }
 
-  update (
-    height,
-    paddleDiff,
-    paddleX,
-    paddleY,
-    paddleWidth,
-    width,
-    paddleHeight
-  ) {
+  update (paddleX) {
     this.x += this.direction.x * this.velocity
     this.y += this.direction.y * this.velocity
-    // Bouncing off the left and right wall
-    if (this.x < 0 || this.x > width) {
+
+    if (this.x < 0 || this.x > WIDTH) {
       this.direction.x *= -1
     }
 
-    // if (this.y > height - paddleDiff || this.y < paddleDiff) {
-    //   if (
-    //     (this.x >= paddleX[0] && this.x <= paddleX[0] + paddleWidth) ||
-    //     (this.x >= paddleX[1] && this.x <= paddleX[1] + paddleWidth)
-    //   ) {
-    //     this.direction.y *= -1
-    //   } else {
-    //     console.log('Reset', paddleX, this.x, this.y)
-    //     this.reset(height, width)
-    //   }
-    // }
-
-    // Bounce off player paddle (bottom)
-    if (this.y > height - paddleDiff) {
-      if (this.x >= paddleX[0] && this.x <= paddleX[0] + paddleWidth) {
+    if (this.y > HEIGHT - PADDLE_DIFF) {
+      if (this.x >= paddleX[0] && this.x <= paddleX[0] + PADDLE_WIDTH) {
         this.direction.y *= -1
-        // trajectoryX[0] = ballX - (paddleX[0] + paddleDiff)
-        // speedX = trajectoryX[0] * 0.3
       } else {
-        // Reset Ball, add to Computer Score
-        this.reset(height, width)
-        // score[1]++
+        this.reset()
       }
     }
-    // Bounce off computer paddle (top)
-    if (this.y < paddleDiff) {
-      if (this.x >= paddleX[1] && this.x <= paddleX[1] + paddleWidth) {
+    if (this.y < PADDLE_DIFF) {
+      if (this.x >= paddleX[1] && this.x <= paddleX[1] + PADDLE_WIDTH) {
         this.direction.y *= -1
-        // trajectoryX[1] = ballX - (paddleX[1] + paddleDiff)
-        // speedX = trajectoryX[1] * 0.3
       } else {
-        this.reset(height, width)
-        // score[0]++
+        this.reset()
       }
     }
   }
