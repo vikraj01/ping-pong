@@ -54,8 +54,10 @@ function animate () {
     height,
     paddleDiff,
     [bottomPaddle.position, topPaddle.position],
+    [bottomPaddle.y, topPaddle.y],
     paddleWidth,
-    width
+    width,
+    paddleHeight
   )
   topPaddle.auto(ball.x)
   window.requestAnimationFrame(animate)

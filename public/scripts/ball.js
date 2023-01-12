@@ -43,26 +43,55 @@ export default class Ball {
     this.velocity = INITIAL_VELOCITY
   }
 
-  update (height, paddleDiff, paddles, paddleWidth, width) {
+  update (
+    height,
+    paddleDiff,
+    paddleX,
+    paddleY,
+    paddleWidth,
+    width,
+    paddleHeight
+  ) {
     this.x += this.direction.x * this.velocity
     this.y += this.direction.y * this.velocity
+    // Bouncing off the left and right wall
     if (this.x < 0 || this.x > width) {
       this.direction.x *= -1
     }
 
-    if (this.y > height - paddleDiff || this.y < paddleDiff) {
-      console.log(
-        (this.x >= paddles[0] && this.x <= paddles[0] + paddleWidth) ||
-          (this.x >= paddles[1] && this.x <= paddles[1] + paddleWidth)
-      )
-      if (
-        (this.x >= paddles[0] && this.x <= paddles[0] + paddleWidth) ||
-        (this.x >= paddles[1] && this.x <= paddles[1] + paddleWidth)
-      ) {
+    // if (this.y > height - paddleDiff || this.y < paddleDiff) {
+    //   if (
+    //     (this.x >= paddleX[0] && this.x <= paddleX[0] + paddleWidth) ||
+    //     (this.x >= paddleX[1] && this.x <= paddleX[1] + paddleWidth)
+    //   ) {
+    //     this.direction.y *= -1
+    //   } else {
+    //     console.log('Reset', paddleX, this.x, this.y)
+    //     this.reset(height, width)
+    //   }
+    // }
+
+    // Bounce off player paddle (bottom)
+    if (this.y > height - paddleDiff) {
+      if (this.x >= paddleX[0] && this.x <= paddleX[0] + paddleWidth) {
         this.direction.y *= -1
+        // trajectoryX[0] = ballX - (paddleX[0] + paddleDiff)
+        // speedX = trajectoryX[0] * 0.3
       } else {
-        console.log('Reset', paddles, this.x, this.y)
+        // Reset Ball, add to Computer Score
         this.reset(height, width)
+        // score[1]++
+      }
+    }
+    // Bounce off computer paddle (top)
+    if (this.y < paddleDiff) {
+      if (this.x >= paddleX[1] && this.x <= paddleX[1] + paddleWidth) {
+        this.direction.y *= -1
+        // trajectoryX[1] = ballX - (paddleX[1] + paddleDiff)
+        // speedX = trajectoryX[1] * 0.3
+      } else {
+        this.reset(height, width)
+        // score[0]++
       }
     }
   }
