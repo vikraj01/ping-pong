@@ -1,51 +1,35 @@
-import Ball from './ball.js'
-import Paddle from './paddle.js'
-import {
-  BOTTOM_PADDLE_HEIGHT,
-  HEIGHT,
-  PADDLE_WIDTH,
-  TOP_PADDLE_HEIGHT,
-  WIDTH
-} from './constants.js';
-import { renderCanvas, createCanvas } from './render.js';
-
-let ball = new Ball(context)
-let bottomPaddle = new Paddle(context, BOTTOM_PADDLE_HEIGHT)
-let topPaddle = new Paddle(context, TOP_PADDLE_HEIGHT)
-
-const canvas = document.createElement('canvas')
-const context = canvas.getContext('2d')
-
-
-
-
-let lastTime
-function animate (time) {
-  if (lastTime != null) {
-    const delta = time - lastTime
-    renderCanvas()
-    ball.update(delta,[bottomPaddle.position, topPaddle.position])
-    topPaddle.auto(ball.x)
+import { HEIGHT, WIDTH } from './constants.js'
+export default class Game {
+  constructor (canvas, context, bottomPaddle, topPaddle, ball) {
+    this.canvas = canvas
+    this.context = context
+    this.bottomPaddle = bottomPaddle
+    this.topPaddle = topPaddle
+    this.ball = ball
   }
-  lastTime = time
-  window.requestAnimationFrame(animate)
+  createCanvas () {
+    console.log('createCanvas', this.canvas)
+    this.canvas.id = 'canvas'
+    this.canvas.width = WIDTH
+    this.canvas.height = HEIGHT
+    document.body.appendChild(this.canvas)
+    this.renderCanvas()
+  }
+  dashedLine () {
+    this.context.beginPath()
+    this.context.setLineDash([4])
+    this.context.moveTo(0, 350)
+    this.context.lineTo(500, 350)
+    this.context.strokeStyle = 'grey'
+    this.context.stroke()
+  }
+
+  renderCanvas () {
+    this.context.fillStyle = 'black'
+    this.context.fillRect(0, 0, WIDTH, HEIGHT)
+    this.bottomPaddle.paint()
+    this.topPaddle.paint()
+    this.dashedLine()
+    this.ball.paint()
+  }
 }
-
-function startGame () {
-  createCanvas()
-  ball.reset()
-  canvas.addEventListener('mousemove', e => {
-    bottomPaddle.position = e.offsetX
-
-    if (bottomPaddle.position < 0) {
-      console.log(`bottomPaddle.position < 0 ${bottomPaddle.position < 0}`)
-      bottomPaddle.position = 0
-    }
-    if (bottomPaddle.position > WIDTH - PADDLE_WIDTH) {
-      bottomPaddle.position = WIDTH - PADDLE_WIDTH
-    }
-  })
-  animate()
-}
-
-startGame()

@@ -62,8 +62,6 @@ export default class Ball {
       if (this.x >= paddleX[0] - PADDLE_TOLERANCE && this.x <= paddleX[0] + PADDLE_WIDTH + PADDLE_TOLERANCE) {
         this.direction.y *= -1
       } else {
-        console.log(this.x, paddleX[0])
-        
         this.reset()
       }
     }
