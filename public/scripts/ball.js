@@ -61,6 +61,7 @@ export default class Ball {
       if (this.x >= paddleX[0] && this.x <= paddleX[0] + PADDLE_WIDTH) {
         this.direction.y *= -1
       } else {
+        console.log(this.x, paddleX)
         this.reset()
       }
     }
@@ -68,6 +69,7 @@ export default class Ball {
       if (this.x >= paddleX[1] && this.x <= paddleX[1] + PADDLE_WIDTH) {
         this.direction.y *= -1
       } else {
+        console.log(this.x, paddleX)
         this.reset()
       }
     }
