@@ -7,6 +7,7 @@ export const PADDLE_DIFF = 25
 export const AI_PADDLE_SPEED = 2
 export const BOTTOM_PADDLE_HEIGHT = HEIGHT - 20
 export const TOP_PADDLE_HEIGHT = 10
+export const PADDLE_TOLERANCE = 10
 
 export const BALL_RADIUS = 5
-export const BALL_INITIAL_VELOCITY = 3
+export const BALL_INITIAL_VELOCITY = .5

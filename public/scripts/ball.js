@@ -5,7 +5,8 @@ import {
   PADDLE_HEIGHT,
   PADDLE_WIDTH,
   BALL_INITIAL_VELOCITY,
-  BALL_RADIUS
+  BALL_RADIUS,
+  PADDLE_TOLERANCE
 } from './constants.js'
 export default class Ball {
   constructor (ctx) {
@@ -49,27 +50,27 @@ export default class Ball {
     this.velocity = BALL_INITIAL_VELOCITY
   }
 
-  update (paddleX) {
-    this.x += this.direction.x * this.velocity
-    this.y += this.direction.y * this.velocity
+  update (delta, paddleX) {
+    this.x += this.direction.x * this.velocity * delta
+    this.y += this.direction.y * this.velocity * delta
 
     if (this.x < 0 || this.x > WIDTH) {
       this.direction.x *= -1
     }
 
     if (this.y > HEIGHT - PADDLE_DIFF) {
-      if (this.x >= paddleX[0] && this.x <= paddleX[0] + PADDLE_WIDTH) {
+      if (this.x >= paddleX[0] - PADDLE_TOLERANCE && this.x <= paddleX[0] + PADDLE_WIDTH + PADDLE_TOLERANCE) {
         this.direction.y *= -1
       } else {
-        console.log(this.x, paddleX)
+        console.log(this.x, paddleX[0])
+        
         this.reset()
       }
     }
     if (this.y < PADDLE_DIFF) {
-      if (this.x >= paddleX[1] && this.x <= paddleX[1] + PADDLE_WIDTH) {
+      if (this.x >= paddleX[1] - PADDLE_TOLERANCE && this.x <= paddleX[1] + PADDLE_WIDTH + PADDLE_TOLERANCE) {
         this.direction.y *= -1
       } else {
-        console.log(this.x, paddleX)
         this.reset()
       }
     }
