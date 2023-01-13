@@ -72,7 +72,7 @@ socket.on('startGame', function (refId, joinedPlayers) {
   setup.isMaster = socket.id === refId
   startGame()
   setup.players = joinedPlayers
-})
+}) 
 
 socket.on('ballMove', function ({ ballX, ballY, score }) {
   ball.x = ballX
