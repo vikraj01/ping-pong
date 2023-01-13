@@ -1,0 +1,54 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <title>Document</title>
+    <link rel="stylesheet" href="css/home.css">
+</head>
+
+<body>
+    <div class="intro">
+        <i class="fa fa-arrow-left" aria-hidden="true"></i>
+        <div class="action" id="join">
+            <div class="action-icon">
+                <img src="./assets/sports_esports_black_24dp.svg" />
+            </div>
+            <div>
+                <input id="join-player" type="text" placeholder="Enter Your Name" class="player-name" />
+                <input  type="text" placeholder="Enter Room Id" id="room-id" />
+                <button id="join-button" class="button-30" >Join Room</button>
+            </div>
+        </div>
+        <div class="action" id="create">
+            <div class="action-icon">
+                <img src="./assets/meeting_room_black_24dp.svg" />
+            </div>
+            <div>
+                <div class="copy-container">
+                    <input type="text" id="created-room-id" disabled />
+                    <i class="fa fa-copy animated bounce"></i>
+                </div>
+                <input id="create-player" type="text" placeholder="Enter Your Name" class="player-name" />
+                <button id="create-button" class="button-30">Create Room</button>
+            </div>
+        </div>
+        <div class="action" id="ai">
+            <div class="action-icon">
+                <img src="./assets/smart_toy_black_24dp.svg" />
+            </div>
+            <div>
+                <button class="button-30">Play With AI</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="scripts/home.js"></script>
+
+</body>
+
+</html>

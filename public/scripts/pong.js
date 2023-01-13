@@ -7,7 +7,7 @@ import {
   TOP_PADDLE_HEIGHT,
   WIDTH
 } from './constants.js';
-import Game from './game.js';
+import Setup from './setup.js';
 
 
 const canvas = document.createElement('canvas')
@@ -16,7 +16,7 @@ const context = canvas.getContext('2d')
 let ball = new Ball(context)
 let bottomPaddle = new Paddle(context, BOTTOM_PADDLE_HEIGHT)
 let topPaddle = new Paddle(context, TOP_PADDLE_HEIGHT)
-let game = new Game(canvas, context, bottomPaddle, topPaddle, ball)
+let setup = new Setup(canvas, context, bottomPaddle, topPaddle, ball)
 
 
 
@@ -25,7 +25,7 @@ let lastTime
 function animate (time) {
   if (lastTime != null) {
     const delta = time - lastTime
-    game.renderCanvas()
+    setup.renderCanvas()
     ball.update(delta,[bottomPaddle.position, topPaddle.position])
     topPaddle.auto(ball.x)
   }
@@ -37,8 +37,7 @@ function animate (time) {
 
 
 function startGame () {
-  console.log('game started')
-  game.createCanvas()
+  setup.createCanvas()
   ball.reset()
   canvas.addEventListener('mousemove', e => {
     bottomPaddle.position = e.offsetX
@@ -54,4 +53,15 @@ function startGame () {
   animate()
 }
 
+
 startGame()
+
+
+const loadGame = () => {
+  setup.createCanvas()
+  setup.renderIntro()
+}
+
+loadGame()
+
+

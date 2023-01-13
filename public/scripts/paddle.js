@@ -1,4 +1,10 @@
-import { AI_PADDLE_SPEED, PADDLE_DIFF, PADDLE_HEIGHT, PADDLE_WIDTH } from "./constants.js"
+import {
+  AI_PADDLE_SPEED,
+  PADDLE_DIFF,
+  PADDLE_HEIGHT,
+  PADDLE_WIDTH,
+  TOP_PADDLE_HEIGHT
+} from './constants.js'
 export default class Paddle {
   constructor (ctx, y) {
     this.ctx = ctx
@@ -15,7 +21,11 @@ export default class Paddle {
   }
 
   paint () {
-    this.ctx.fillStyle = 'white'
+    if (this.y === TOP_PADDLE_HEIGHT) {
+      this.ctx.fillStyle = 'red'
+    } else {
+      this.ctx.fillStyle = 'white'
+    }
     this.ctx.fillRect(this.position, this.y, PADDLE_WIDTH, PADDLE_HEIGHT)
   }
 
