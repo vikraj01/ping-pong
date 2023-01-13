@@ -11,3 +11,5 @@ export const PADDLE_TOLERANCE = 12
 
 export const BALL_RADIUS = 5
 export const BALL_INITIAL_VELOCITY = 1.5
+
+export const WINNING_SCORE = 10

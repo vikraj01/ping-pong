@@ -8,7 +8,7 @@ import {
   BALL_RADIUS,
   PADDLE_TOLERANCE
 } from './constants.js'
-import { socket } from './socket.js'
+import { socket } from './pong.js'
 export default class Ball {
   constructor (ctx) {
     this.ctx = ctx
@@ -55,24 +55,21 @@ export default class Ball {
     })
   }
 
-  
-
-  move () {
-    this.x += this.direction.x * this.velocity 
-    this.y += this.direction.y * this.velocity 
+  move (score) {
+    this.x += this.direction.x * this.velocity
+    this.y += this.direction.y * this.velocity
     socket.emit('ballMove', {
       ballX: this.x,
       ballY: this.y,
-      dir: this.direction
+      score: score
     })
   }
 
-  boundaries (paddleX) {
-    
+  boundaries (paddleX, score) {
     if (this.x < 0 || this.x > WIDTH) {
       this.direction.x *= -1
     }
- 
+
     if (this.y > HEIGHT - PADDLE_DIFF) {
       if (
         this.x >= paddleX[0] - PADDLE_TOLERANCE &&
@@ -81,6 +78,7 @@ export default class Ball {
         this.direction.y *= -1
       } else {
         this.reset()
+        score.top++
       }
     }
     if (this.y < PADDLE_DIFF) {
@@ -91,10 +89,10 @@ export default class Ball {
         this.direction.y *= -1
       } else {
         this.reset()
+        score.bottom++
       }
     }
   }
-
 }
 
 function randomNum (min, max) {

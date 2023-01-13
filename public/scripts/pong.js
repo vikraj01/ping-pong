@@ -8,7 +8,7 @@ import {
   WIDTH
 } from './constants.js'
 import Setup from './setup.js'
-import { socket, listen } from './socket.js'
+export const socket = io('/pong')
 
 const canvas = document.createElement('canvas')
 const context = canvas.getContext('2d')
@@ -20,31 +20,21 @@ let setup = new Setup(canvas, context, bottomPaddle, topPaddle, ball)
 
 function animate (time) {
   if (setup.isMaster) {
-    ball.move()
-    ball.boundaries([bottomPaddle.position, topPaddle.position])
+    ball.move(setup.score)
+    ball.boundaries([bottomPaddle.position, topPaddle.position],setup.score)
+    setup.gameOver()
   }
   setup.renderCanvas()
-  window.requestAnimationFrame(animate)
+  if (!setup.isGameOver) window.requestAnimationFrame(animate)
 }
 
 export function startGame () {
   setup.createCanvas()
   ball.reset()
-
-  let paddle
-  if (setup.isMaster) {
-    console.log(setup.isMaster, 'top paddle')
-    paddle = topPaddle
-  } else {
-    console.log(setup.isMaster, 'bottom paddle')
-    paddle = bottomPaddle
-  }
-
+  let paddle = setup.isMaster ? topPaddle : bottomPaddle
   canvas.addEventListener('mousemove', e => {
     paddle.position = e.offsetX
-
     if (paddle.position < 0) {
-      console.log(`paddle.position < 0 ${paddle.position < 0}`)
       paddle.position = 0
     }
     if (paddle.position > WIDTH - PADDLE_WIDTH) {
@@ -64,14 +54,24 @@ const loadGame = () => {
 }
 
 loadGame()
-listen()
 
-socket.on('startGame', (refId, joinedPlayers) => {
+//------------------------------------- Game Over Logic -------------------------------------------//
+
+socket.on('gameOver', function (winner) {
+  setup.isGameOver = true;
+  setup.renderGameOver(winner)
+})
+
+//-------------------------------------- Socket Logic ----------------------------------------------//
+
+socket.on('connect', () => {
+  console.log('Connected as...', socket.id)
+})
+
+socket.on('startGame', function (refId, joinedPlayers) {
   setup.isMaster = socket.id === refId
   startGame()
-  console.log('refree id is ', refId)
-  console.log(setup.isMaster)
-  console.log(refId, socket.id)
+  setup.players = joinedPlayers
 })
 
 socket.on('ballMove', function ({ ballX, ballY, dir }) {
@@ -79,13 +79,7 @@ socket.on('ballMove', function ({ ballX, ballY, dir }) {
   ball.y = ballY
 })
 
-socket.on('paddleMove', ({ position }) => {
-  let opponentPaddle
-  if (setup.isMaster) {
-    opponentPaddle = bottomPaddle
-  } else {
-    opponentPaddle = topPaddle
-  }
-
+socket.on('paddleMove', function ({ position }) {
+  let opponentPaddle = setup.isMaster ? bottomPaddle : topPaddle
   opponentPaddle.position = position
 })
