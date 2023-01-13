@@ -6,9 +6,9 @@ export default class Setup {
     this.bottomPaddle = bottomPaddle
     this.topPaddle = topPaddle
     this.ball = ball
-    this.isMaster = false;
-    this.player = null;
-    this.score = 0;
+    this.isMaster = false
+    this.player = null
+    this.score = 0
   }
   createCanvas () {
     console.log('createCanvas', this.canvas)
@@ -39,37 +39,53 @@ export default class Setup {
   renderIntro () {
     this.context.fillStyle = 'rgb(70, 70, 70)'
     this.context.fillRect(0, 0, WIDTH, HEIGHT)
-    
 
-    const roomId = '7383873g9d898e'
+    const { room, player } = JSON.parse(localStorage.getItem('room-details'))
     this.context.fillStyle = 'white'
     this.context.font = '32px Lato'
-    
-    this.context.fillText(`Welcome to the pong game 🏓`, 40, this.canvas.height / 2 - 90)
-    this.context.fillText(`🚪 Room : ${roomId}`, 20, this.canvas.height / 2 - 30)
-    this.context.fillText(`🏌️ Player : Sol`, 20, this.canvas.height / 2 + 30)
+
+    this.context.fillText(
+      `Welcome to the pong game 🏓`,
+      40,
+      this.canvas.height / 2 - 90
+    )
+    this.context.fillText(`🚪 Room : ${room}`, 20, this.canvas.height / 2 - 30)
+    this.context.fillText(`🏌️ Player : ${player}`, 20, this.canvas.height / 2 + 30)
     this.context.font = '24px Lato'
-    this.context.fillText(` Waiting For Your Opponent To Join ...`, 40, this.canvas.height / 2 + 180)
+    this.context.fillText(
+      ` Waiting For Your Opponent To Join ...`,
+      40,
+      this.canvas.height / 2 + 180
+    )
   }
   renderGameOver () {
     this.context.fillStyle = 'rgb(70, 70, 70)'
     this.context.fillRect(0, 0, WIDTH, HEIGHT)
-  
+
     const roomId = '7383873g9d898e'
     this.context.fillStyle = 'white'
     this.context.font = '32px Lato'
-    
-    this.gameStatus = true
-    if(this.gameStatus){
-      this.context.font = '40px Lato'
-      this.context.fillText(`Congrats Sol! You Win 🍻`, 30, this.canvas.height / 2 - 90)
-      
-      
-    }else{
-      this.context.font = '32px Lato'
-      this.context.fillText(`Sorry , You loss! But No Worries, `, 30, this.canvas.height / 2 - 90)
-      this.context.fillText(`You'll get it next time champ 🍻 `, 30, this.canvas.height / 2 - 30)
-    }
 
+    this.gameStatus = true
+    if (this.gameStatus) {
+      this.context.font = '40px Lato'
+      this.context.fillText(
+        `Congrats Sol! You Win 🍻`,
+        30,
+        this.canvas.height / 2 - 90
+      )
+    } else {
+      this.context.font = '32px Lato'
+      this.context.fillText(
+        `Sorry , You loss! But No Worries, `,
+        30,
+        this.canvas.height / 2 - 90
+      )
+      this.context.fillText(
+        `You'll get it next time champ 🍻 `,
+        30,
+        this.canvas.height / 2 - 30
+      )
+    }
   }
 }

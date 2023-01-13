@@ -14,22 +14,16 @@ function generateId () {
 }
 
 function updateJoinButtonState () {
-  console.log('updateJoinButtonState')
   if ($roomId.val()?.trim() === '' || $joinPlayer.val()?.trim() === '') {
-    console.log('Button is disabled')
     $joinBtn.prop('disabled', true)
   } else {
-    console.log('button is enabled')
     $joinBtn.prop('disabled', false)
   }
 }
 function updateCreateButtonState () {
-  console.log('updateCreateButton')
   if ($createPlayer.val()?.trim() === '') {
-    console.log('Button is disabled')
     $createBtn.prop('disabled', true)
   } else {
-    console.log('button is enabled')
     $createBtn.prop('disabled', false)
   }
 }
@@ -45,7 +39,7 @@ $('#join button, #join .action-icon img').on('click', () => {
 
     console.log(roomDetails)
     localStorage.setItem('room-details', JSON.stringify(roomDetails))
-    window.location.assign('play.html')
+    window.location.assign('pong.html')
   } else {
     $('#create, #ai').hide()
     $('#room-id').show()
@@ -71,7 +65,7 @@ $('#create button, #create .action-icon img').on('click', () => {
     }
     console.log(roomDetails)
     localStorage.setItem('room-details', JSON.stringify(roomDetails))
-    window.location.assign('play.html')
+    window.location.assign('pong.html')
   } else {
     $('#join, #ai').hide()
     $('#created-room-id').show().val(generateId())

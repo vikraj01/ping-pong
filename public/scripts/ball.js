@@ -8,6 +8,7 @@ import {
   BALL_RADIUS,
   PADDLE_TOLERANCE
 } from './constants.js'
+import { socket } from './socket.js'
 export default class Ball {
   constructor (ctx) {
     this.ctx = ctx
@@ -48,31 +49,52 @@ export default class Ball {
       this.direction = { x: Math.cos(heading), y: Math.sin(heading) }
     }
     this.velocity = BALL_INITIAL_VELOCITY
+    socket.emit('ballMove', {
+      ballX: this.x,
+      ballY: this.y
+    })
   }
 
-  update (delta, paddleX) {
-    this.x += this.direction.x * this.velocity * delta
-    this.y += this.direction.y * this.velocity * delta
+  
 
+  move () {
+    this.x += this.direction.x * this.velocity 
+    this.y += this.direction.y * this.velocity 
+    socket.emit('ballMove', {
+      ballX: this.x,
+      ballY: this.y,
+      dir: this.direction
+    })
+  }
+
+  boundaries (paddleX) {
+    
     if (this.x < 0 || this.x > WIDTH) {
       this.direction.x *= -1
     }
-
+ 
     if (this.y > HEIGHT - PADDLE_DIFF) {
-      if (this.x >= paddleX[0] - PADDLE_TOLERANCE && this.x <= paddleX[0] + PADDLE_WIDTH + PADDLE_TOLERANCE) {
+      if (
+        this.x >= paddleX[0] - PADDLE_TOLERANCE &&
+        this.x <= paddleX[0] + PADDLE_WIDTH + PADDLE_TOLERANCE
+      ) {
         this.direction.y *= -1
       } else {
         this.reset()
       }
     }
     if (this.y < PADDLE_DIFF) {
-      if (this.x >= paddleX[1] - PADDLE_TOLERANCE && this.x <= paddleX[1] + PADDLE_WIDTH + PADDLE_TOLERANCE) {
+      if (
+        this.x >= paddleX[1] - PADDLE_TOLERANCE &&
+        this.x <= paddleX[1] + PADDLE_WIDTH + PADDLE_TOLERANCE
+      ) {
         this.direction.y *= -1
       } else {
         this.reset()
       }
     }
   }
+
 }
 
 function randomNum (min, max) {

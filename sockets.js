@@ -5,6 +5,7 @@ function listen (io) {
     console.log('client connected...', socket.id)
     let roomId
     socket.on('ready', data => {
+      console.log(data)
       roomId = data.room
       const room = pongNamespace.adapter.rooms.get(data.room)
       if (room) {
@@ -26,9 +27,8 @@ function listen (io) {
       }
     })
 
-    socket.on('paddleMove', paddleData => {
-      console.log(paddleData)
-      socket.to(roomId).emit('paddleMove', paddleData)
+    socket.on('paddleMove', position => {
+      socket.to(roomId).emit('paddleMove', position)
     })
 
     socket.on('ballMove', ballData => {

@@ -6,9 +6,9 @@ import {
   PADDLE_WIDTH,
   TOP_PADDLE_HEIGHT,
   WIDTH
-} from './constants.js';
-import Setup from './setup.js';
-
+} from './constants.js'
+import Setup from './setup.js'
+import { socket, listen } from './socket.js'
 
 const canvas = document.createElement('canvas')
 const context = canvas.getContext('2d')
@@ -18,50 +18,74 @@ let bottomPaddle = new Paddle(context, BOTTOM_PADDLE_HEIGHT)
 let topPaddle = new Paddle(context, TOP_PADDLE_HEIGHT)
 let setup = new Setup(canvas, context, bottomPaddle, topPaddle, ball)
 
-
-
-
-let lastTime
 function animate (time) {
-  if (lastTime != null) {
-    const delta = time - lastTime
-    setup.renderCanvas()
-    ball.update(delta,[bottomPaddle.position, topPaddle.position])
-    topPaddle.auto(ball.x)
+  if (setup.isMaster) {
+    ball.move()
+    ball.boundaries([bottomPaddle.position, topPaddle.position])
   }
-  lastTime = time
+  setup.renderCanvas()
   window.requestAnimationFrame(animate)
 }
 
-
-
-
-function startGame () {
+export function startGame () {
   setup.createCanvas()
   ball.reset()
-  canvas.addEventListener('mousemove', e => {
-    bottomPaddle.position = e.offsetX
 
-    if (bottomPaddle.position < 0) {
-      console.log(`bottomPaddle.position < 0 ${bottomPaddle.position < 0}`)
-      bottomPaddle.position = 0
+  let paddle
+  if (setup.isMaster) {
+    console.log(setup.isMaster, 'top paddle')
+    paddle = topPaddle
+  } else {
+    console.log(setup.isMaster, 'bottom paddle')
+    paddle = bottomPaddle
+  }
+
+  canvas.addEventListener('mousemove', e => {
+    paddle.position = e.offsetX
+
+    if (paddle.position < 0) {
+      console.log(`paddle.position < 0 ${paddle.position < 0}`)
+      paddle.position = 0
     }
-    if (bottomPaddle.position > WIDTH - PADDLE_WIDTH) {
-      bottomPaddle.position = WIDTH - PADDLE_WIDTH
+    if (paddle.position > WIDTH - PADDLE_WIDTH) {
+      paddle.position = WIDTH - PADDLE_WIDTH
     }
+    socket.emit('paddleMove', {
+      position: paddle.position
+    })
   })
   animate()
 }
 
-
-startGame()
-
-
 const loadGame = () => {
   setup.createCanvas()
   setup.renderIntro()
+  socket.emit('ready', JSON.parse(localStorage.getItem('room-details')))
 }
 
 loadGame()
+listen()
 
+socket.on('startGame', (refId, joinedPlayers) => {
+  setup.isMaster = socket.id === refId
+  startGame()
+  console.log('refree id is ', refId)
+  console.log(setup.isMaster)
+  console.log(refId, socket.id)
+})
 
+socket.on('ballMove', function ({ ballX, ballY, dir }) {
+  ball.x = ballX
+  ball.y = ballY
+})
+
+socket.on('paddleMove', ({ position }) => {
+  let opponentPaddle
+  if (setup.isMaster) {
+    opponentPaddle = bottomPaddle
+  } else {
+    opponentPaddle = topPaddle
+  }
+
+  opponentPaddle.position = position
+})
