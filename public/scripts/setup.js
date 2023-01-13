@@ -1,5 +1,5 @@
 import { HEIGHT, WIDTH, WINNING_SCORE } from './constants.js'
-import socket from './pong.js'
+import { socket } from './pong.js'
 export default class Setup {
   constructor (canvas, context, bottomPaddle, topPaddle, ball) {
     this.canvas = canvas
@@ -43,12 +43,33 @@ export default class Setup {
     this.context.stroke()
   }
 
+  renderPlayerAndScore () {
+    this.context.font = '32px Courier New'
+    this.context.textAlign = 'start'
+    this.context.fillText(this.score.bottom, 20, this.canvas.height / 2 + 50)
+    this.context.fillText(this.score.top, 20, this.canvas.height / 2 - 30)
+    this.context.font = '16px Courier New'
+    this.context.fillStyle = '#fff'
+    // this.context.textAlign = 'right'
+    this.context.fillText(
+      this.players?.bottom,
+      canvas.width - 10,
+      canvas.height / 2 + 30
+    )
+    this.context.fillText(
+      this.players?.top,
+      canvas.width - 10,
+      canvas.height / 2 - 30
+    )
+  }
+
   renderCanvas () {
     this.context.fillStyle = 'black'
     this.context.fillRect(0, 0, WIDTH, HEIGHT)
     this.bottomPaddle.paint()
     this.topPaddle.paint()
     this.dashedLine()
+    this.renderPlayerAndScore()
     this.ball.paint()
   }
 
@@ -92,25 +113,6 @@ export default class Setup {
       this.canvas.height / 2 - 90
     )
 
-    // if (this.gameStatus) {
-    //   this.context.font = '40px Lato'
-    //   this.context.fillText(
-    //     `Congrats ${winner}! You Win 🍻`,
-    //     30,
-    //     this.canvas.height / 2 - 90
-    //   )
-    // } else {
-    //   this.context.font = '32px Lato'
-    //   this.context.fillText(
-    //     `Sorry ${winner}, You loss! But No Worries, `,
-    //     30,
-    //     this.canvas.height / 2 - 90
-    //   )
-    //   this.context.fillText(
-    //     `You'll get it next time champ 🍻 `,
-    //     30,
-    //     this.canvas.height / 2 - 30
-    //   )
-    // }
+    
   }
 }

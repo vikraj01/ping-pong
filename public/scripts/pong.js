@@ -21,7 +21,7 @@ let setup = new Setup(canvas, context, bottomPaddle, topPaddle, ball)
 function animate (time) {
   if (setup.isMaster) {
     ball.move(setup.score)
-    ball.boundaries([bottomPaddle.position, topPaddle.position],setup.score)
+    ball.boundaries([bottomPaddle.position, topPaddle.position], setup.score)
     setup.gameOver()
   }
   setup.renderCanvas()
@@ -58,7 +58,7 @@ loadGame()
 //------------------------------------- Game Over Logic -------------------------------------------//
 
 socket.on('gameOver', function (winner) {
-  setup.isGameOver = true;
+  setup.isGameOver = true
   setup.renderGameOver(winner)
 })
 
@@ -74,9 +74,11 @@ socket.on('startGame', function (refId, joinedPlayers) {
   setup.players = joinedPlayers
 })
 
-socket.on('ballMove', function ({ ballX, ballY, dir }) {
+socket.on('ballMove', function ({ ballX, ballY, score }) {
   ball.x = ballX
   ball.y = ballY
+  setup.score.bottom = score.bottom
+  setup.score.top = score.top
 })
 
 socket.on('paddleMove', function ({ position }) {

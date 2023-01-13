@@ -12,7 +12,7 @@ function listen (io) {
         if (room.size < 2) {
           // Get player data for both players from playerData map
           // const players = [playerData.get(data.room).player1, data.player]
-          console.log(players)
+          // console.log(players)
           socket.join(data.room)
 
           pongNamespace
