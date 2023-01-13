@@ -1,13 +1,23 @@
 {
-  "name": "multi-player-pong",
+  "name": "pong-final",
   "version": "1.0.0",
-  "description": "",
+  "description": "- Have to fix the Increasing Speed of Ball After Hit\r -",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js" 
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vikraj01/ping-pong.git"
+  },
+  "keywords": [],
   "author": "",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vikraj01/ping-pong/issues"
+  },
+  "homepage": "https://github.com/vikraj01/ping-pong#readme",
   "dependencies": {
     "express": "^4.18.2",
     "socket.io": "^4.5.4"
