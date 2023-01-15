@@ -20,8 +20,12 @@ export default class Setup {
     ) {
       const winner =
         this.score.top === WINNING_SCORE
-          ? this.players.top
-          : this.players.bottom
+          ? { winner: this.players.top, paddle: 'TOP', loser: this.players.bottom }
+          : {
+              winner: this.players.bottom,
+              paddle: 'BOTTOM',
+              loser: this.players.top
+            }
       socket.emit('gameOver', winner)
     }
   }
@@ -50,7 +54,7 @@ export default class Setup {
     this.context.fillText(this.score.top, 20, this.canvas.height / 2 - 30)
     this.context.font = '16px Courier New'
     this.context.fillStyle = '#fff'
-    // this.context.textAlign = 'right'
+    this.context.textAlign = 'right'
     this.context.fillText(
       this.players?.bottom,
       canvas.width - 10,
@@ -61,6 +65,7 @@ export default class Setup {
       canvas.width - 10,
       canvas.height / 2 - 30
     )
+    this.context.textAlign = 'start'
   }
 
   renderCanvas () {
@@ -99,20 +104,47 @@ export default class Setup {
       this.canvas.height / 2 + 180
     )
   }
-  renderGameOver (winner) {
-    this.context.fillStyle = 'rgb(70, 70, 70)'
-    this.context.fillRect(0, 0, WIDTH, HEIGHT)
 
-    this.context.fillStyle = 'white'
-    this.context.font = '32px Lato'
-
+  renderWinner (winner) {
     this.context.font = '40px Lato'
     this.context.fillText(
       `Congrats ${winner}! You Win 🍻`,
       30,
       this.canvas.height / 2 - 90
     )
+  }
 
-    
+  renderLoser (loser) {
+    this.context.font = '40px Lato'
+    this.context.fillText(
+      `Sorry ${loser}! You lost`,
+      30,
+      this.canvas.height / 2 - 90
+    )
+    this.context.fillText(
+      `Better Luck next time🍻`,
+      30,
+      this.canvas.height / 2 - 30
+    )
+  }
+  
+  renderGameOver (result) {
+    console.log(result, this.isMaster)
+    this.context.fillStyle = 'rgb(70, 70, 70)'
+    this.context.fillRect(0, 0, WIDTH, HEIGHT)
+    this.context.fillStyle = 'white'
+    if (result.paddle === 'TOP') {
+      if (this.isMaster) {
+        this.renderWinner(result.winner)
+      } else {
+        this.renderLoser(result.loser)
+      }
+    } else {
+      if (this.isMaster) {
+        this.renderLoser(result.loser)
+      } else {
+        this.renderWinner(result.winner)
+      }
+    }
   }
 }

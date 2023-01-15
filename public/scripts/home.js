@@ -105,7 +105,7 @@ $('.fa-arrow-left').on('click', () => {
 
 $('#ai').on('click', () => {
   localStorage.setItem('room-details', 'ai')
-  window.location.assign('play.html')
+  window.location.assign('auto.html')
 })
 
 $('.fa-copy').on('click', () => {

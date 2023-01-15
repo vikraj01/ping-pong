@@ -10,6 +10,7 @@ export const TOP_PADDLE_HEIGHT = 10
 export const PADDLE_TOLERANCE = 12
 
 export const BALL_RADIUS = 5
-export const BALL_INITIAL_VELOCITY = 1.5
+export const BALL_INITIAL_VELOCITY = 2.4
+export const BALL_VELOCITY_INCREASE = 1
 
-export const WINNING_SCORE = 10
+export const WINNING_SCORE = 5

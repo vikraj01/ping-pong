@@ -6,7 +6,8 @@ import {
   PADDLE_WIDTH,
   BALL_INITIAL_VELOCITY,
   BALL_RADIUS,
-  PADDLE_TOLERANCE
+  PADDLE_TOLERANCE,
+  BALL_VELOCITY_INCREASE
 } from './constants.js'
 import { socket } from './pong.js'
 export default class Ball {
@@ -76,6 +77,10 @@ export default class Ball {
         this.x <= paddleX[0] + PADDLE_WIDTH + PADDLE_TOLERANCE
       ) {
         this.direction.y *= -1
+        this.velocity += BALL_VELOCITY_INCREASE
+        if (this.velocity > 4.5) {
+          this.velocity = 4.5
+        }
       } else {
         this.reset()
         score.top++
@@ -87,6 +92,10 @@ export default class Ball {
         this.x <= paddleX[1] + PADDLE_WIDTH + PADDLE_TOLERANCE
       ) {
         this.direction.y *= -1
+        this.velocity += BALL_VELOCITY_INCREASE
+        if (this.velocity > 4.5) {
+          this.velocity = 4.5
+        }
       } else {
         this.reset()
         score.bottom++
