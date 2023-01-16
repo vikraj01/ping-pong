@@ -31,7 +31,6 @@ export default class Setup {
   }
 
   createCanvas () {
-    console.log('createCanvas', this.canvas)
     this.canvas.id = 'canvas'
     this.canvas.width = WIDTH
     this.canvas.height = HEIGHT
@@ -129,7 +128,6 @@ export default class Setup {
   }
   
   renderGameOver (result) {
-    console.log(result, this.isMaster)
     this.context.fillStyle = 'rgb(70, 70, 70)'
     this.context.fillRect(0, 0, WIDTH, HEIGHT)
     this.context.fillStyle = 'white'

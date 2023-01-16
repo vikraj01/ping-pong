@@ -71,7 +71,6 @@ socket.on('connect', () => {
 socket.on('startGame', function (refId, joinedPlayers) {
   setup.isMaster = socket.id === refId
   startGame()
-  console.log(joinedPlayers)
   setup.players = joinedPlayers
 }) 
 

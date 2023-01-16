@@ -37,7 +37,7 @@ $('#join button, #join .action-icon img').on('click', () => {
       player: $joinPlayer.val()
     }
 
-    console.log(roomDetails)
+    
     localStorage.setItem('room-details', JSON.stringify(roomDetails))
     window.location.assign('pong.html')
   } else {
@@ -63,7 +63,6 @@ $('#create button, #create .action-icon img').on('click', () => {
       isCreate: false,
       player: $createPlayer.val()
     }
-    console.log(roomDetails)
     localStorage.setItem('room-details', JSON.stringify(roomDetails))
     window.location.assign('pong.html')
   } else {
